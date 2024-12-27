@@ -1,0 +1,28 @@
+name: Post to WordPress
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  post-to-wordpress:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Post to WordPress
+        env:
+          WORDPRESS_URL: http://localhost/wordpress
+          WORDPRESS_USER: raymondlee
+          WORDPRESS_PASSWORD: rl88889999
+        run: |
+          curl -X POST "$WORDPRESS_URL/wp-json/wp/v2/posts" \
+          -u $WORDPRESS_USER:$WORDPRESS_PASSWORD \
+          -H "Content-Type: application/json" \
+          -d '{
+                "title": "Auto-generated Post",
+                "content": "This is a post from GitHub!",
+                "status": "publish"
+              }'
